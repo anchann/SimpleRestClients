@@ -100,6 +100,7 @@ export interface XMLHttpRequestProgressEvent extends ProgressEvent {
 export type SendDataType = Params | string | NativeFileData;
 
 export interface WebRequestOptions {
+    returnRawData?: true;
     withCredentials?: boolean;
     retries?: number;
     priority?: WebRequestPriority;
@@ -479,6 +480,11 @@ export abstract class SimpleWebRequestBase<TOptions extends WebRequestOptions = 
             SimpleWebRequest._setRequestHeader(this._xhr!!!, this._xhrRequestHeaders!!!, key, value);
         });
 
+        // HACKING
+        if (this._options.returnRawData) {
+            this._xhr.responseType = 'text';
+        }
+
         if (this._options.sendData) {
             const contentType = SimpleWebRequestBase.mapContentType(this._options.contentType || 'json');
             SimpleWebRequest._setRequestHeader(this._xhr, this._xhrRequestHeaders, 'Content-Type', contentType);
@@ -786,7 +792,7 @@ export class SimpleWebRequest<TBody, TOptions extends WebRequestOptions = WebReq
             }
 
             body = this._xhr.response;
-            if (headers['content-type'] && isJsonContentType(headers['content-type'])) {
+            if (!this._options.returnRawData && headers['content-type'] && isJsonContentType(headers['content-type'])) {
                 if (!body || !_.isObject(body)) {
                     // Response can be null if the responseType does not match what the server actually sends
                     // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType
