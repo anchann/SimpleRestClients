@@ -7,7 +7,7 @@
  */
 
 import * as SyncTasks from 'synctasks';
-import { defaults, isString } from 'lodash';
+import { defaults, isString } from './lodashMini';
 import { WebRequestOptions, SimpleWebRequest, WebResponse, Headers } from './SimpleWebRequest';
 
 export type HttpAction = 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH';

@@ -6,7 +6,7 @@
  * Simple client for issuing web requests.
  */
 
-import * as _ from 'lodash';
+import * as _ from './lodashMini';
 import * as SyncTasks from 'synctasks';
 
 import { assert } from './utils';
